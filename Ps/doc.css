@@ -1,0 +1,250 @@
+* {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: rgb(0, 0, 136);
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+
+  .dashboard {
+    background: #00b7ff;
+    border-radius: 24px; 
+    width: 100%;
+    max-width: 1200px;
+    box-shadow: 0 25px 50px rgba(0, 88, 255, 0.15);
+    padding: 40px 50px;
+    display: flex;
+    gap: 50px;
+  }
+
+  .side-panel {
+    width: 330px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .profile {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+  }
+  .profile-picture {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 0 15px rgba(0, 88, 255, 0.3);
+  }
+  .profile-info {
+    flex: 1;
+  }
+  .profile-name {
+    font-size: 22px;
+    font-weight: 700;
+    color: #0058ff;
+    margin: 0 0 5px 0;
+  }
+  .profile-contact {
+    font-size: 14px;
+    color: #60718a;
+    margin: 0 0 15px 0;
+  }
+  .labels {
+    display: flex;
+    gap: 10px;
+  }
+  .label {
+    background: #c9dbff;
+    color: #0045d9;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 6px 16px;
+    border-radius: 40px;
+    user-select: none;
+  }
+  .label.volunteer {
+    background: #d5e2ff;
+    color: #0063ff;
+  }
+
+  .recruitment {
+    background: #00ffff;
+    border-radius: 18px;
+    padding: 24px 28px;
+    box-shadow: inset 0 0 12px #d9e7ff;
+  }
+  .recruitment-title {
+    font-weight: 700;
+    font-size: 18px;
+    color: #0058ff;
+    margin-bottom: 16px;
+  }
+  .recruitment-desc {
+    font-size: 14px;
+    color: #60718a;
+    margin-bottom: 20px;
+  }
+  .input-wrapper {
+    position: relative;
+    margin-bottom: 22px;
+  }
+  .input-wrapper input {
+    width: 100%;
+    padding: 10px 135px 10px 14px;
+    font-size: 14px;
+    border-radius: 30px;
+    border: 1.5px solid #a6c5ff;
+    color: #003baf;
+    outline-offset: 2px;
+  }
+  .input-wrapper input:focus {
+    border-color: #0058ff;
+    box-shadow: 0 0 8px rgba(0, 88, 255, 0.3);
+  }
+  .btn-group {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 10px;
+  }
+  button.copy-btn {
+    position: relative;
+    top: 40px;
+    padding: 7px 18px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    color: white;
+    background-color: #0058ff;
+    transition: background-color 0.3s ease;
+  }
+  button.copy-btn:hover {
+    background-color: #0040cc;
+  }
+
+  .progress-container {
+    margin-top: 10px;
+  }
+  .progress-label {
+    position: relative;
+    top: 30px;
+    font-weight: 700;
+    font-size: 16px;
+    color: #0040c3;
+    margin-bottom: 10px;
+  }
+  .progress-bar-bg {
+    position: relative;
+    top: 30px;
+    background: #cce0ff;
+    border-radius: 24px;
+    height: 22px;
+    overflow: hidden;
+    width: 100%;
+    max-width: 320px;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    width: 25%;
+    background: #0058ff;
+    border-radius: 24px 0 0 24px;
+    transition: width 0.4s ease;
+  }
+  .progress-note {
+    position: relative;
+    top: 30px;
+    margin-top: 8px;
+    color: #60718a;
+    font-size: 13px;
+  }
+
+  .achievements-container {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px 28px;
+  }
+
+  .achievement-card {
+    background: #f4faff;
+    border-radius: 18px;
+    padding: 20px 18px;
+    box-shadow: inset 0 0 12px #dae6ff;
+    cursor: default;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: box-shadow 0.2s ease;
+  }
+  .achievement-card:hover {
+    box-shadow: 0 10px 25px rgba(0, 88, 255, 0.2);
+  }
+  .achievement-card.locked {
+    filter: grayscale(1);
+    opacity: 0.5;
+  }
+  .achievement-icon {
+    background: #e2f0ff;
+    border-radius: 14px;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 28px;
+    color: #0058ff;
+    box-shadow: 0 0 10px rgba(0, 88, 255, 0.15);
+  }
+  .achievement-icon.gold {
+    background: #ffd580;
+    color: #a67400;
+    box-shadow: 0 0 15px rgba(170, 130, 0, 0.45);
+  }
+  .achievement-icon.purple {
+    background: #b38aff;
+    color: #4b2fa3;
+    box-shadow: 0 0 15px rgba(75, 47, 163, 0.45);
+  }
+
+  .achievement-title {
+    font-weight: 700;
+    font-size: 16px;
+    color: #0047c3;
+    margin-bottom: 4px;
+    text-align: center;
+  }
+  .achievement-sub {
+    font-size: 13px;
+    color: #60718a;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  @media (max-width: 960px) {
+    .dashboard {
+      flex-direction: column;
+      width: 100%;
+      padding: 30px;
+    }
+    .side-panel {
+      width: 100%;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 30px;
+    }
+    .achievements-container {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+  }

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="doc.css">
+<title>Achievements Dashboard</title>
+</head>
+<body>
+  <main class="dashboard" aria-label="User achievements dashboard">
+
+    <aside class="side-panel" aria-label="User profile and recruitment information">
+
+      <section class="profile" aria-label="User profile">
+        <img src="NYINGNYANG.webp" alt="Profile picture of Hotdog" class="profile-picture" />
+        <div class="profile-info">
+          <h1 class="profile-name">Nying Nyang</h1>
+          <p class="profile-contact">NyingNyang@gmail.com</p>
+          <div class="labels">
+            <span class="label">Member</span>
+            <span class="label volunteer">Volunteer</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="recruitment" aria-label="Recruitment info">
+        <h2 class="recruitment-title">Recruitment info</h2>
+        <p class="recruitment-desc">Invite your friends to become a campaign user</p>
+        <div class="input-wrapper">
+          <input type="text" readonly aria-label="Invite link for campaign user" value="NGIIIIIII" />
+          <div class="btn-group">
+            <button class="copy-btn" type="button" aria-label="Copy invite link">Copy link</button>
+            <button class="copy-btn" type="button" aria-label="Copy bonus link">Copy Bonus link</button>
+          </div>
+        </div>
+        <div class="progress-container" aria-label="Profile progress information">
+          <div class="progress-label">My achievements</div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" style="width: 25%;"></div>
+          </div>
+          <p class="progress-note">Profile progress 25% from NYINGNYANG</p>
+        </div>
+      </section>
+
+    </aside>
+
+    <section id="achievements-container" class="achievements-container" aria-label="Achievements list">
+    </section>
+
+  </main>
+
+<script>
+  // Achivements
+  const achievementsData = [
+    { title: 'Signed Up', subtitle: 'Complete profile', icon: '✔️', iconClass: '', isLocked: false },
+    { title: 'Volunteer', subtitle: 'Complete 1 task', icon: '⭐', iconClass: 'gold', isLocked: false },
+    { title: 'Host', subtitle: 'Organize 1 event', icon: '🏠', iconClass: 'purple', isLocked: false },
+    { title: 'Member', subtitle: 'Member level', icon: '👤', iconClass: '', isLocked: false },
+    { title: 'Recruiter', subtitle: 'Send 5 invites', icon: '🏆', iconClass: '', isLocked: true },
+    { title: '10 Recruits', subtitle: 'Send 10 invites', icon: '👥', iconClass: '', isLocked: true },
+    { title: '100 Recruits', subtitle: 'Send 100 invites', icon: '🎖️', iconClass: '', isLocked: true },
+    { title: 'Donor 0', subtitle: 'Donate $0', icon: '💰', iconClass: '', isLocked: true },
+    { title: 'Support Crew', subtitle: 'Support 2 events', icon: '🛠️', iconClass: '', isLocked: true },
+    { title: 'Community Leader', subtitle: 'Lead 3 communities', icon: '🎭', iconClass: '', isLocked: true },
+    { title: 'Featured Guest', subtitle: 'Host 5 shows', icon: '🎉', iconClass: '', isLocked: true },
+    { title: 'Moderator Achiever', subtitle: 'Moderate 10 discussions', icon: '🔒', iconClass: '', isLocked: true },
+  ];
+
+  // Function for achievements
+  function renderAchievements(achievements, containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    container.innerHTML = '';
+    achievements.forEach(({ title, subtitle, icon, iconClass, isLocked }) => {
+      const card = document.createElement('article');
+      card.className = 'achievement-card' + (isLocked ? ' locked' : '');
+      card.setAttribute('tabindex', '0');
+      if (isLocked) {
+        card.setAttribute('aria-disabled', 'true');
+      }
+
+      const iconDiv = document.createElement('div');
+      iconDiv.className = 'achievement-icon';
+      if(iconClass) iconDiv.classList.add(iconClass);
+      iconDiv.setAttribute('aria-hidden', 'true');
+      iconDiv.textContent = icon;
+
+      const titleDiv = document.createElement('div');
+      titleDiv.className = 'achievement-title';
+      titleDiv.textContent = title;
+
+      const subDiv = document.createElement('div');
+      subDiv.className = 'achievement-sub';
+      subDiv.textContent = subtitle;
+
+      card.appendChild(iconDiv);
+      card.appendChild(titleDiv);
+      card.appendChild(subDiv);
+
+      container.appendChild(card);
+    });
+  }
+
+  // For page load
+  renderAchievements(achievementsData, 'achievements-container');
+
+  // Copy link function
+  document.querySelectorAll('.copy-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      const inviteInput = document.querySelector('.input-wrapper input');
+      if (!inviteInput) return;
+      // Copy input value
+      inviteInput.select();
+      inviteInput.setSelectionRange(0, 99999);
+      try {
+        navigator.clipboard.writeText(inviteInput.value);
+        button.textContent = 'Copied!';
+        setTimeout(() => {
+          button.textContent = button.getAttribute('aria-label').includes('Bonus') ? 'Copy Bonus link' : 'Copy link';
+        }, 1500);
+      } catch {
+        alert('Copy failed. Please copy manually.');
+      }
+      window.getSelection().removeAllRanges();
+    });
+  });
+</script>
+
+</body>
+</html>

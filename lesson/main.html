@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Lessons & Battle</title>
+    <style>
+        /* White Dominating Aesthetic */
+        body {
+            margin: 0;
+            font-family: 'monospace', monospace;
+            background: #fff;
+            /* Dominant White */
+            color: #000;
+            /* Black Text */
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            border: 1px solid #000;
+            box-sizing: border-box;
+        }
+
+        .interface {
+            flex: 1;
+            display: none;
+            padding: 10px;
+            overflow: auto;
+            border-bottom: 1px solid #000;
+        }
+
+        .active {
+            display: block;
+        }
+
+        footer {
+            background: #000;
+            /* Black Footer */
+            color: #fff;
+            /* White text for contrast */
+            padding: 10px;
+            text-align: center;
+            border-top: 1px solid #000;
+        }
+
+        footer span {
+            cursor: pointer;
+            margin: 0 10px;
+            color: #fff;
+            text-decoration: none;
+            /* No underline */
+            border: 1px solid #fff;
+            padding: 2px 5px;
+        }
+
+        footer span:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        button {
+            margin: 5px;
+            padding: 5px 10px;
+            font-size: 14px;
+            cursor: pointer;
+            background: #fff;
+            /* White Button */
+            color: #000;
+            /* Black Text */
+            border: 1px solid #000;
+            border-radius: 0;
+            font-family: 'monospace', monospace;
+        }
+
+        button:hover {
+            background: #000;
+            color: #fff;
+        }
+
+        #lessonContent {
+            background: #f0f0f0;
+            /* Light Gray for Lesson box */
+            border: 1px solid #000;
+            padding: 10px;
+            margin-top: 10px;
+            line-height: 1.6;
+        }
+
+        #lessonNav {
+            margin-top: 10px;
+        }
+
+        #battleFrame {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        #battleInterface {
+            padding: 0;
+            overflow: hidden;
+        }
+
+        /* Modal styles */
+        #modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+
+        #modalContent {
+            background-color: #fff;
+            /* White modal background */
+            color: #000;
+            border: 1px solid #000;
+            margin: 15% auto;
+            padding: 20px;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        #modalClose {
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #000;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Lesson Interface -->
+    <div id="lessonInterface" class="interface active">
+        <h2 id="lessonTitle">Lesson 1: HTML Structure</h2>
+        <div id="lessonContent">
+            The basic structure of an HTML page. <br>Your goal: <b>Create a basic HTML structure.</b>
+        </div>
+        <div id="lessonNav">
+            <button id="prevLesson">&lt;-</button>
+            <button id="nextLesson">-&gt;</button>
+        </div>
+        <p>Go to the <b>Battle</b> tab to test your code and fight the bug!</p>
+    </div>
+
+    <!-- Battle Interface -->
+    <div id="battleInterface" class="interface">
+        <iframe id="battleFrame" src="battle.html"></iframe>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <span id="lessonTab">LESSON</span> | <span id="battleTab">BATTLE</span>
+    </footer>
+
+    <!-- Modal -->
+    <div id="modal">
+        <div id="modalContent">
+            <span id="modalClose">&times;</span>
+            <p id="modalText"></p>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC START -->
+ <script src="script.js"></script>
+    <!-- JAVASCRIPT LOGIC END -->
+
+</body>
+
+</html>

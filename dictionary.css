@@ -49,3 +49,24 @@ body {
 .dictionary-container li:hover:not(.locked) {
     background: #00aaff;
 }
+
+.definition-box {
+    position: fixed;
+    left: 400px;
+    top: 100px;
+    right: 50px;
+    bottom: 50px;
+    padding: 20px;
+    background: rgba(18,18,31,0.8);
+    border-radius: 10px;
+    overflow: auto;
+}
+
+.definition-box h3 {
+    color: #00c6ff;
+}
+
+.definition-box p {
+    margin-top: 15px;
+    line-height: 1.5;
+}

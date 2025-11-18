@@ -20,6 +20,12 @@
     </ul>
 </div>
 
+
+<div class="definition-box" id="definitionBox">
+    <h3 id="termTitle">Select a term</h3>
+    <p id="termDefinition">Definition appears here...</p>
+</div>
+
 <script src="script.js"></script>
 </body>
 </html>

@@ -20,3 +20,32 @@ body {
 }
 
 .topborder h1 { font-size: 1.8rem; letter-spacing: 2px; }
+
+.dictionary-container {
+    margin-top: 100px;
+    margin-left: 50px;
+    width: 300px;
+}
+
+.dictionary-container ul {
+    list-style: none;
+    padding: 0;
+}
+
+.dictionary-container li {
+    padding: 10px;
+    margin-bottom: 5px;
+    background: rgba(255,255,255,0.1);
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.2s;
+}
+
+.dictionary-container li.locked {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.dictionary-container li:hover:not(.locked) {
+    background: #00aaff;
+}

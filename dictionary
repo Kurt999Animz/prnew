@@ -12,6 +12,14 @@
     <h1>DICTIONARY</h1>
 </div>
 
+
+<div class="dictionary-container">
+    <h2>Terminologies</h2>
+    <ul id="termList">
+        <!-- Terms injected here. js.-->
+    </ul>
+</div>
+
 <script src="script.js"></script>
 </body>
 </html>

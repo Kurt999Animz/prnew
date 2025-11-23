@@ -86,27 +86,7 @@ button:disabled {
 /* =========================================
    4. FOOTER (Centered Navigation)
    ========================================= */
-footer {
-    display: flex;
-    justify-content: center; /* Centers the buttons horizontally */
-    align-items: center;
-    gap: 20px; /* Spacing between buttons */
-    padding: 15px;
-    flex-shrink: 0;
-    z-index: 10;
-}
 
-footer span {
-    cursor: pointer;
-    padding: 8px 20px;
-    border: 1px solid rgba(255,255,255,0.3);
-    background: rgba(0,0,0,0.3);
-    transition: 0.3s;
-    color: #aaa;
-    font-size: 1.2rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
 
 footer span:hover, footer span.active {
     color: #fff;
@@ -116,7 +96,44 @@ footer span:hover, footer span.active {
     text-shadow: 0 0 8px #fff;
 }
 
-/* =========================================
+/* ================================/* ===== MOBILE FOOTER FIX ===== */
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+
+    padding: 10px 5px;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(4px);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    z-index: 999;
+}
+
+/* Buttons resize properly on mobile */
+footer span {
+    padding: 6px 14px;
+    font-size: 1rem;
+}
+
+/* Extra stability for super small screens */
+@media (max-width: 480px) {
+    footer {
+        gap: 6px;
+        padding: 8px 4px;
+    }
+
+    footer span {
+        padding: 5px 10px;
+        font-size: 0.9rem;
+        white-space: nowrap;
+    }
+}=========
    5. MAIN LAYOUT (Compact)
    ========================================= */
 
@@ -296,4 +313,5 @@ textarea#editor:focus {
 }
 #modalClose:hover {
     text-shadow: 0 0 10px #ff0055;
+
 }

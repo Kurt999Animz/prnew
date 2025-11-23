@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dev Dictionary</title>
+  <link rel="stylesheet" href="dictionary.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <nav class="hud">
+    <div class="hud-left">
+      <h1 class="brand">CODE<span class="highlight">DEX</span></h1>
+    </div>
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="Search terms..." autocomplete="off">
+    </div>
+  </nav>
+
+  <main class="dictionary-wrapper">
+    
+    <aside class="term-list-container">
+      <div class="list-header">
+        <small>AVAILABLE TERMS</small>
+      </div>
+      <ul id="termList" class="term-list">
+        </ul>
+    </aside>
+
+    <section class="definition-area">
+      <div class="definition-card" id="definitionCard">
+        <div class="card-header">
+          <span class="tag" id="defCategory">Select a term</span>
+          <h1 id="defTitle">Welcome</h1>
+        </div>
+        <div class="card-body">
+          <p id="defDescription">Select a term from the list to view its definition, syntax, and usage.</p>
+          
+          <div class="code-block" id="codeBlock" style="display: none;">
+            <pre><code id="defSyntax"></code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="background-shapes">
+    <span></span><span></span><span></span>
+  </div>
+
+  <script src="dictionary.js"></script>
+</body>
+</html>

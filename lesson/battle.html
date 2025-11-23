@@ -3,89 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <title>CreateJS Battle Demo</title>
-<script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+<script src="create.js"></script>
+<link rel="stylesheet" href="style.css">
 <style>
-  /* White Dominating Aesthetic */
-  body { 
-    background: #fff; /* Dominant White */
-    color: #000; /* Black Text */
-    font-family: 'monospace', monospace; 
-    text-align: center; 
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    box-sizing: border-box;
-  }
-  canvas { 
-    background: url("bg.png"); /* Black canvas for graphic contrast */
-    background-size: cover;
-    display: block; 
-    margin: 10px auto 0; 
-    image-rendering: pixelated; 
-    border: 1px solid #000;
-    box-sizing: border-box;
-  }
-  #editorUI {
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-    flex-grow: 1; 
-  }
-  textarea { 
-    width: 100%; 
-    height: 100px;
-    flex-grow: 1; 
-    background: #fff; /* White Editor */
-    color: #000; /* Black Text */
-    font-family: 'monospace', monospace; 
-    padding: 10px; 
-    border: 1px solid #000;
-    border-radius: 0;
-    box-sizing: border-box;
-    margin-bottom: 10px;
-  }
-  button { 
-    margin: 0 auto; 
-    padding: 10px 20px; 
-    font-size: 16px; 
-    cursor: pointer; 
-    background: #fff; /* White Button */
-    color: #000; /* Black Text */
-    border: 1px solid #000;
-    border-radius: 0;
-    font-family: 'monospace', monospace;
-  }
-  button:hover {
-    background: #000;
-    color: #fff;
-  }
-  button:disabled {
-    background: #aaa;
-    color: #eee;
-    cursor: not-allowed;
-    border-color: #aaa;
-  }
-  /* --- FIX: Text Separation CSS --- */
-  #challengeBox { /* Persistent challenge text */
-    padding: 5px 10px;
-    min-height: 1.2em;
-    color: #000;
-    border-top: 1px solid #000;
-  }
-
-  #feedbackBox { /* Temporary messages */
-    padding: 5px 10px 10px;
-    min-height: 1.2em;
-    border-bottom: 1px solid #000;
-    color: red; 
+  html, body {
+    background-color: transparent !important;
+    background: transparent !important;
   }
 </style>
 </head>
-<body>
+
+<body class="battle-body">
 
 <canvas id="game" width="800" height="250"></canvas>
+
 <div id="challengeBox">Loading challenge...</div>
 <div id="feedbackBox"></div>
 <div id="editorUI">
@@ -94,279 +25,344 @@
 </div>
 
 <script>
-// Make key variables global
+
+// --- NEW SCALING FUNCTION ---
+function scaleCanvas() {
+  const canvas = document.getElementById("game");
+  let newWidth = Math.min(window.innerWidth - 20, 800);
+  let newHeight = newWidth * (250 / 800);
+  canvas.style.width = newWidth + "px";
+  canvas.style.height = newHeight + "px";
+}
+
+window.addEventListener("resize", scaleCanvas);
+window.addEventListener("load", scaleViews);
+
+function scaleViews() {
+    scaleCanvas();
+    window.parent.postMessage({ type: "iframeLoaded" }, "*");
+}
+
+// ---------------- GAME VARS ----------------
 let stage, character, bug, bugHealthBar, playerHealthBar, challengeBox, feedbackBox, checkBtn;
 let bugHealth = 100;
 let playerHealth = 100;
-let bugDamage = 25; // Tracks the current damage the bug deals
-let currentChallenge = "Loading challenge..."; // Store the current challenge
-let isAttacking = false; 
-let isBattleOver = false; 
+let bugDamage = 25;
+let currentChallenge = "Loading challenge...";
+let isAttacking = false;
+let isBattleOver = false;
 let hasLoadedSprite = false;
 
-// --- THIS IS YOUR LOAD QUEUE ---
+// ---------------- LOAD SPRITE FILES ----------------
 const queue = new createjs.LoadQueue();
 queue.on("complete", setup);
 queue.on("error", handleLoadError);
-queue.loadFile({id:"charImage", src:"Sprite-0001.png"});
-queue.loadFile({id:"charJSON", src:"Sprite-0001.json"});
+
+// Load your uploaded sprite files
+queue.loadFile({id:"charImage", src:"char.png"});
+queue.loadFile({id:"charJSON", src:"char.json"});
+queue.loadFile({id:"bugImage", src:"bug.png"});
+queue.loadFile({id:"bugJSON", src:"bug.json"});
 queue.load();
 
 function handleLoadError(event) {
     console.warn("Could not load sprite files:", event.item.src);
-    if (challengeBox) {
-        challengeBox.textContent = "Sprite file not found. Loading placeholder...";
-    }
+    if (!stage) setup();
 }
 
+// ---------------- SETUP ----------------
 function setup() {
+    if (stage) return;
+
     stage = new createjs.Stage("game");
     challengeBox = document.getElementById('challengeBox');
     feedbackBox = document.getElementById('feedbackBox');
     checkBtn = document.getElementById('checkBtn');
+
     challengeBox.textContent = currentChallenge;
-    feedbackBox.textContent = ""; 
-    
-    // --- YOUR CHARACTER CODE ---
+
+    // --------------------------------------------------
+    // ---------------- CHARACTER SPRITE ----------------
+    // --------------------------------------------------
     const charData = queue.getResult("charJSON");
     const charImage = queue.getResult("charImage");
 
     if (charData && charImage) {
+
         hasLoadedSprite = true;
         const charFrames = [];
-        for (let frameName in charData.frames) {
-            const f = charData.frames[frameName].frame;
-            charFrames.push([f.x,f.t,f.w,f.h]);
-        }
+
+        const charNames = Object.keys(charData.frames);
+        charNames.forEach(n => {
+            const f = charData.frames[n].frame;
+            charFrames.push([f.x, f.y, f.w, f.h]);
+        });
+
+        const idlelastFrames = charNames.filter(n=>n.includes("idlelast")).map(n=>charNames.indexOf(n));
+        const idleFrames     = charNames.filter(n=>n.includes("idle )")).map(n=>charNames.indexOf(n));
+        const hitFrames      = charNames.filter(n=>n.includes("hit")).map(n=>charNames.indexOf(n));
+        const attackFrames   = charNames.filter(n=>n.includes("attack")).map(n=>charNames.indexOf(n));
 
         const charSheet = new createjs.SpriteSheet({
             images:[charImage],
             frames: charFrames,
-            animations: {
-                idle: { frames:[0,1,2,3,4,5], next:"idle" },
-                attack: { frames:[6,7,8,9,10,11], next:false },
-                hit: { frames:[12,13,14,15,16,17], next:false }
+            animations:{
+                idle:{ frames: idleFrames, next:"idle", speed:0.4 },
+                hit:{ frames: hitFrames, next:"idle", speed:0.4 },
+                attack:{ frames: attackFrames, next:"idle", speed:0.7 },
+                idlelast:{ frames: idlelastFrames, next:"idle", speed:0.7 }
             }
         });
 
         character = new createjs.Sprite(charSheet, "idle");
-        
-        character.x = 100; 
+        character.x = 100;
         character.y = 150;
-        character.scale = 2;
-        character.regX = 50; 
-        character.regY = 50;
 
-        character.on("animationend", ()=> {
-            if(character.currentAnimation !== "idle") {
-                character.gotoAndPlay("idle");
-            }
-        });
-        
+        // Flip horizontally without moving
+        character.scaleX = -0.35;
+        character.scaleY = 0.35;
+
+        // Use actual sprite size to keep position stable
+        character.regX = 551 / 2;
+        character.regY = 455 / 2;
+
     } else {
-        // --- FALLBACK PLACEHOLDER ---
-        const charGraphics = new createjs.Graphics().beginFill("#00FFFF").drawRect(0, 0, 40, 80); 
-        character = new createjs.Shape(charGraphics);
-        character.x = 100; 
+        const g = new createjs.Graphics().beginFill("#00FFFF").drawRect(0,0,40,80);
+        character = new createjs.Shape(g);
+        character.x = 100;
         character.y = 150;
-        character.regX = 20; 
-        character.regY = 40; 
+        character.regX = 20;
+        character.regY = 40;
     }
 
-    // --- YOUR BUG PLACEHOLDER ---
-    bug = new createjs.Shape();
-    bug.graphics.beginFill("red").drawRect(0,0,50,50); 
-    bug.x = 600;
-    bug.y = 150;
-    bug.regX = 25;
-    bug.regY = 25;
+    // --------------------------------------------------
+    // ---------------- BUG SPRITE ----------------------
+    // --------------------------------------------------
+    const bugData = queue.getResult("bugJSON");
+    const bugImage = queue.getResult("bugImage");
 
-    // --- HEALTH BARS ---
-    const playerHealthBG = new createjs.Shape();
-    playerHealthBG.graphics.beginFill("#000").drawRect(0, 0, 100, 10);
-    playerHealthBG.x = 50; playerHealthBG.y = 20;
-    stage.addChild(playerHealthBG);
+    if (bugData && bugImage) {
+
+        const bugFrames = [];
+        const bugNames = Object.keys(bugData.frames);
+
+        bugNames.forEach(n => {
+            const f = bugData.frames[n].frame;
+            bugFrames.push([f.x, f.y, f.w, f.h]);
+        });
+
+        // EXACT MATCHING FOR YOUR JSON
+        const idleFrames = bugNames
+            .filter(n => n.startsWith("bug (idle)"))
+            .map(n => bugNames.indexOf(n));
+
+        const hitFrames = bugNames
+            .filter(n => n.startsWith("bug (hit)"))
+            .map(n => bugNames.indexOf(n));
+
+        const bugSheet = new createjs.SpriteSheet({
+            images:[bugImage],
+            frames: bugFrames,
+            animations:{
+                idle: { frames: idleFrames, next:"idle", speed:0.7 },
+                hit:  { frames: hitFrames,  next:"idle", speed:0.7 }
+            }
+        });
+
+        bug = new createjs.Sprite(bugSheet, "idle");
+        bug.x = 600;
+        bug.y = 150;
+        bug.scale = 0.7;
+        bug.regX = 128;
+        bug.regY = 128;
+
+    } else {
+        bug = new createjs.Shape();
+        bug.graphics.beginFill("red").drawRect(0,0,50,50);
+        bug.x = 600;
+        bug.y = 150;
+        bug.regX = 25;
+        bug.regY = 25;
+    }
+
+    // HEALTH BAR
+    const playerBG = new createjs.Shape();
+    playerBG.graphics.beginFill("rgba(0,0,0,0.5)").drawRect(0,0,100,10);
+    playerBG.x = 50; playerBG.y = 20;
+    stage.addChild(playerBG);
 
     playerHealthBar = new createjs.Shape();
     playerHealthBar.x = 50; playerHealthBar.y = 20;
     stage.addChild(playerHealthBar);
 
-    const bugHealthBG = new createjs.Shape();
-    bugHealthBG.graphics.beginFill("#000").drawRect(0, 0, 100, 10);
-    bugHealthBG.x = 650; bugHealthBG.y = 20;
-    stage.addChild(bugHealthBG);
+    const bugBG = new createjs.Shape();
+    bugBG.graphics.beginFill("rgba(0,0,0,0.5)").drawRect(0,0,100,10);
+    bugBG.x = 650; bugBG.y = 20;
+    stage.addChild(bugBG);
 
     bugHealthBar = new createjs.Shape();
     bugHealthBar.x = 650; bugHealthBar.y = 20;
     stage.addChild(bugHealthBar);
 
     stage.addChild(character, bug);
-    updateHealthBars(); // Initial draw
+    updateHealthBars();
 
-    // --- YOUR TICKER ---
-    createjs.Ticker.framerate = 12;
+    createjs.Ticker.framerate = 24;
     createjs.Ticker.on("tick", stage);
 
-    // --- EDITOR AND CHECK BUTTON ---
     const editor = document.getElementById('editor');
 
-    checkBtn.onclick = ()=>{
+    checkBtn.onclick = () => {
       if (isAttacking || isBattleOver) return;
-      
       if (hasLoadedSprite && character.currentAnimation !== "idle") return;
-      
       const html = editor.value;
       window.parent.postMessage({ type: 'checkRequest', html: html }, '*');
     };
-    
-    // Tell parent iframe is loaded
-    window.parent.postMessage({ type: "iframeLoaded" }, "*");
+
+    scaleCanvas();
 }
 
+
+// -------- healthbars ----------
 function updateHealthBars() {
-  playerHealthBar.graphics.clear().beginFill(playerHealth < 30 ? "red" : "#00FF00").drawRect(0, 0, playerHealth, 10);
-  bugHealthBar.graphics.clear().beginFill(bugHealth < 30 ? "red" : "#00FF00").drawRect(0, 0, bugHealth, 10);
+  if (!playerHealthBar || !bugHealthBar) return;
+  playerHealthBar.graphics.clear().beginFill(playerHealth < 30 ? "#ff4136" : "#39CCCC").drawRect(0,0,playerHealth,10);
+  bugHealthBar.graphics.clear().beginFill(bugHealth < 30 ? "#ff4136" : "#39CCCC").drawRect(0,0,bugHealth,10);
 }
 
-function updateFeedback(text, color = "red") { 
-    feedbackBox.style.color = color;
-    feedbackBox.textContent = text;
+function updateFeedback(text, color="#ff4136") {
+  if (color==="green") color="#2ECC40";
+  feedbackBox.style.color = color;
+  feedbackBox.textContent = text;
 }
 
-
-// --- PLAYER ATTACK ---
+// --------------------------------------------------
+// ------------ PLAYER ATTACK -----------------------
+// --------------------------------------------------
 function playerAttack() {
-  if (isAttacking || isBattleOver) return; 
+  if (isAttacking || isBattleOver) return;
   isAttacking = true;
-  updateFeedback("Correct! Attacking...", "green"); 
 
-  if (hasLoadedSprite) {
-      character.gotoAndPlay("attack");
-  }
+  updateFeedback("Correct! Attacking...", "green");
+
+  if (hasLoadedSprite) character.gotoAndPlay("attack");
 
   createjs.Tween.get(character)
     .to({x: bug.x - 60}, 300)
     .call(() => {
-      // Player damage set to 35
-      bugHealth -= 35; // 35 damage per hit
+      bugHealth -= 35;
       if (bugHealth < 0) bugHealth = 0;
       updateHealthBars();
-      
-      bug.alpha = 0.2;
-      createjs.Tween.get(bug).to({alpha: 1}, 200);
-      checkWinCondition(); 
+
+      bug.gotoAndPlay("hit");
+
+      checkWinCondition();
     })
-    .to({x: 100}, 300) 
+    .to({x: 100}, 300)
     .call(() => {
       if (bugHealth > 0) {
-        // Display the floored damage value (6 or 25)
         updateFeedback("Bug survived! It attacks! (Damage reduced to " + Math.floor(bugDamage) + ")", "red");
         window.parent.postMessage({ type: "attackComplete" }, "*");
         setTimeout(bugAttack, 500);
       } else {
-        isAttacking = false; 
-        updateFeedback(""); 
+        isAttacking = false;
+        updateFeedback("");
       }
     });
 }
 
-// --- BUG ATTACK ---
+// --------------------------------------------------
+// ------------ BUG ATTACK (NO MORE HIT ANIMATION) --
+// --------------------------------------------------
+
 function bugAttack() {
-  if (isBattleOver) return; 
-  
-  if (isAttacking && character.x !== 100) {
-      setTimeout(bugAttack, 300);
-      return;
-  }
+  if (isBattleOver) return;
+  if (isAttacking && character.x !== 100) return setTimeout(bugAttack, 300);
+
   isAttacking = true;
-  
+
+  // NO MORE hit animation here
+  actuallyDoBugAttack();
+}
+
+function actuallyDoBugAttack() {
   createjs.Tween.get(bug)
     .to({x: character.x + 60}, 300)
     .call(() => {
-      // Apply Math.floor() to bugDamage, ensuring 6.25 damage becomes 6 HP or 25 damage remains 25 HP.
-      playerHealth -= Math.floor(bugDamage); 
+      playerHealth -= Math.floor(bugDamage);
       if (playerHealth < 0) playerHealth = 0;
       updateHealthBars();
-      
-      if (hasLoadedSprite) {
-          character.gotoAndPlay("hit");
-      } else {
-          character.alpha = 0.2;
-          createjs.Tween.get(character).to({alpha: 1}, 200);
-      }
-      checkWinCondition(); 
+
+      if (hasLoadedSprite) character.gotoAndPlay("hit");
+
+      checkWinCondition();
     })
-    .to({x: 600}, 300) 
+    .to({x:600},300)
     .call(() => {
       isAttacking = false;
-      if (playerHealth > 0) {
-         updateFeedback("The bug's attack is complete. Try again.", "red"); 
-      }
+      if (playerHealth > 0) updateFeedback("The bug's attack is complete. Try again.", "red");
     });
 }
 
+// --------------------------------------------------
+// ------------ WIN / LOSS --------------------------
+// --------------------------------------------------
 function checkWinCondition() {
   if (bugHealth <= 0 && !isBattleOver) {
-    isBattleOver = true; 
-    checkBtn.disabled = true; 
-    updateFeedback("CHALLENGE COMPLETE!", "green"); 
+    isBattleOver = true;
+    checkBtn.disabled = true;
+    updateFeedback("CHALLENGE COMPLETE!", "green");
     window.parent.postMessage({ type: "battleWon" }, "*");
   } else if (playerHealth <= 0 && !isBattleOver) {
-    isBattleOver = true; 
-    checkBtn.disabled = true; 
-    updateFeedback("YOU WERE DEFEATED... Respawning.", "red"); 
-    setTimeout(resetBattle, 2000); 
+    isBattleOver = true;
+    checkBtn.disabled = true;
+    updateFeedback("YOU WERE DEFEATED... Respawning.", "red");
+    setTimeout(resetBattle, 2000);
   }
 }
 
 function resetBattle() {
-  // --- FIX: Check the player's health status *before* resetting it ---
-  const wasPlayerDead = (playerHealth <= 0);
-
+  const died = (playerHealth <= 0);
   bugHealth = 100;
   playerHealth = 100;
   updateHealthBars();
   bug.x = 600;
   character.x = 100;
   isAttacking = false;
-  isBattleOver = false; 
-  checkBtn.disabled = false; 
-  
-  if (hasLoadedSprite) {
-    character.gotoAndPlay("idle");
-  }
+  isBattleOver = false;
+  checkBtn.disabled = false;
+
+  if (hasLoadedSprite) character.gotoAndPlay("idle");
+
   document.getElementById('editor').value = "";
-  
-  // --- FIX: Use the 'wasPlayerDead' variable to check ---
-  if (wasPlayerDead) {
+
+  if (died) {
     window.parent.postMessage({ type: "playerDied" }, "*");
-    updateFeedback(""); 
+    updateFeedback("");
   } else {
-    // This was a "soft" reset (e.g., next lesson), not a death
-    challengeBox.textContent = currentChallenge; 
-    updateFeedback(""); 
+    challengeBox.textContent = currentChallenge;
+    updateFeedback("");
   }
 }
 
-// --- Listen for messages from main window ---
-window.addEventListener("message", (e) => {
+window.addEventListener("message", e => {
   if (e.source !== window.parent) return;
 
-  if (e.data.type === "setBugDamage") {
-    bugDamage = e.data.damage;
-  } else if (e.data.type === "loadLesson") {
-    currentChallenge = "Challenge: " + e.data.challenge; 
-    challengeBox.textContent = currentChallenge; 
-    updateFeedback(""); 
+  if (e.data.type === "setBugDamage") bugDamage = e.data.damage;
+  else if (e.data.type === "loadLesson") {
+    currentChallenge = "Challenge: " + e.data.challenge;
+    challengeBox.textContent = currentChallenge;
+    updateFeedback("");
   } else if (e.data.type === "checkSuccess") {
     playerAttack();
   } else if (e.data.type === "checkFailure") {
-    updateFeedback("HTML check failed. The bug attacks!", "red"); 
+    updateFeedback("HTML check failed. The bug attacks!", "red");
     setTimeout(bugAttack, 500);
   } else if (e.data.type === "resetBattle") {
     resetBattle();
   }
 });
+
 </script>
 </body>
 </html>

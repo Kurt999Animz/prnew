@@ -132,4 +132,11 @@ body {
   border-radius: 40px;
 }
 
-.label.
+*::-webkit-scrollbar {
+  display: none;
+}
+
+/* Works for Firefox */
+* {
+  scrollbar-width: none;
+}

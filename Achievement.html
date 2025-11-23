@@ -1,135 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="stylesheet" href="styles.css">
-<title>Achievements Dashboard</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Achievements</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Borrowing the Flashcard/Dictionary Theme */
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Poppins", sans-serif; }
+    
+    body {
+      background: radial-gradient(circle at top left, #1a1a2e, #16213e);
+      color: #fff;
+      padding: 40px;
+      min-height: 100vh;
+    }
+
+    h1 { margin-bottom: 10px; color: #00c6ff; letter-spacing: 1px; }
+    p.subtitle { color: #a6b5e0; margin-bottom: 40px; }
+
+    /* Total Progress Section */
+    .summary-box {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .level-circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #00c6ff;
+      color: #1a1a2e;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 1.5rem;
+      box-shadow: 0 0 15px rgba(0, 198, 255, 0.5);
+    }
+
+    .xp-bar-container { flex-grow: 1; }
+    .xp-text { display: flex; justify-content: space-between; margin-bottom: 5px; font-weight: bold; }
+    .xp-bg { width: 100%; height: 15px; background: rgba(0,0,0,0.3); border-radius: 10px; overflow: hidden; }
+    .xp-fill { height: 100%; background: linear-gradient(90deg, #00c6ff, #0072ff); width: 45%; }
+
+    /* Grid for Achievements */
+    .achievements-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: rgba(18, 18, 31, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 25px;
+      border-radius: 15px;
+      text-align: center;
+      transition: 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover { transform: translateY(-5px); border-color: #00c6ff; }
+    
+    .icon { font-size: 3rem; margin-bottom: 15px; display: block; }
+    
+    .card h3 { color: #fff; margin-bottom: 5px; }
+    .card p { color: #a6b5e0; font-size: 0.9rem; }
+
+    /* Locked State */
+    .card.locked { opacity: 0.5; filter: grayscale(1); }
+    .card.locked::after {
+      content: "🔒";
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 1.2rem;
+    }
+
+    /* Background Animation (Optional) */
+    .bg-shape {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none;
+    }
+    *::-webkit-scrollbar {
+  display: none;
+}
+
+/* Works for Firefox */
+* {
+  scrollbar-width: none;
+}
+  </style>
 </head>
 <body>
-  <main class="dashboard" aria-label="User achievements dashboard">
 
-<div class="leftbar">
-  <div class="homebar">
-    <button class="home-btn">Home</button>
+  <h1>ACHIEVEMENTS</h1>
+  <p class="subtitle">Track your learning milestones</p>
+
+  <div class="summary-box">
+    <div class="level-circle">Lvl 3</div>
+    <div class="xp-bar-container">
+      <div class="xp-text">
+        <span>Total Experience</span>
+        <span>450 / 1000 XP</span>
+      </div>
+      <div class="xp-bg"><div class="xp-fill"></div></div>
+    </div>
   </div>
-  <nav class="anothernav">
-    <ul>
-      <li><a href="#">Dashboard</a></li>
-      <li><a href="#">Profile</a></li>
-      <li><a href="#">achievements</a></li>
-       <li><a href="#">Settings</a></li>
-    </ul>
-  </nav>
-</div>
 
-    <aside class="side-panel" aria-label="User profile and recruitment information">
+  <div class="achievements-grid">
+    
+    <div class="card">
+      <span class="icon">🚀</span>
+      <h3>Hello World</h3>
+      <p>Completed your first lesson.</p>
+    </div>
 
-      <section class="profile" aria-label="User profile">
-        <img src="NYINGNYANG.webp" alt="Profile picture of Hotdog" class="profile-picture" />
-        <div class="profile-info">
-          <h1 class="profile-name">Nying Nyang</h1>
-          <p class="profile-contact">NyingNyang@gmail.com</p>
-          <div class="labels">
-            <span class="label">Member</span>
-            <span class="label volunteer">Volunteer</span>
-          </div>
-        </div>
-      </section>
+    <div class="card">
+      <span class="icon">🔥</span>
+      <h3>On Fire</h3>
+      <p>Maintain a 3-day streak.</p>
+    </div>
 
-      <section class="recruitment" aria-label="Recruitment info">
-        <h2 class="recruitment-title">Recruitment info</h2>
-        <p class="recruitment-desc">Invite your friends to become a campaign user</p>
-        <div class="input-wrapper">
-          <input type="text" readonly aria-label="Invite link for campaign user" value="NGIIIIIII" />
-          <div class="btn-group">
-            <button class="copy-btn" type="button" aria-label="Copy invite link">Copy link</button>
-            <button class="copy-btn" type="button" aria-label="Copy bonus link">Copy Bonus link</button>
-          </div>
-        </div>
-        <div class="progress-container" aria-label="Profile progress information">
-          <div class="progress-label">My achievements</div>
-          <div class="progress-bar-bg">
-            <div class="progress-bar-fill" style="width: 25%;"></div>
-          </div>
-          <p class="progress-note">Profile progress 25% from NYINGNYANG</p>
-        </div>
-      </section>
+    <div class="card">
+      <span class="icon">🧠</span>
+      <h3>Big Brain</h3>
+      <p>Score 100% on a quiz.</p>
+    </div>
 
-    </aside>
+    <div class="card locked">
+      <span class="icon">💻</span>
+      <h3>Coder</h3>
+      <p>Finish the HTML Course.</p>
+    </div>
 
-    <section id="achievements-container" class="achievements-container" aria-label="Achievements list">
-    </section>
+    <div class="card locked">
+      <span class="icon">⚡</span>
+      <h3>Speedster</h3>
+      <p>Complete a lesson in under 1 min.</p>
+    </div>
 
-  </main>
+    <div class="card locked">
+      <span class="icon">🛡️</span>
+      <h3>CSS Master</h3>
+      <p>Unlock all CSS cards.</p>
+    </div>
 
-<script>
-  // Achivements
-  const achievementsData = [
-    { title: 'Signed Up', subtitle: 'Complete profile', icon: '✔️', iconClass: '', isLocked: false },
-    { title: 'Volunteer', subtitle: 'Complete 1 task', icon: '⭐', iconClass: 'gold', isLocked: false },
-    { title: 'Host', subtitle: 'Organize 1 event', icon: '🏠', iconClass: 'purple', isLocked: false },
-  ];
-
-  // Function for achievements
-  function renderAchievements(achievements, containerId) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-    container.innerHTML = '';
-    achievements.forEach(({ title, subtitle, icon, iconClass, isLocked }) => {
-      const card = document.createElement('article');
-      card.className = 'achievement-card' + (isLocked ? ' locked' : '');
-      card.setAttribute('tabindex', '0');
-      if (isLocked) {
-        card.setAttribute('aria-disabled', 'true');
-      }
-
-      const iconDiv = document.createElement('div');
-      iconDiv.className = 'achievement-icon';
-      if(iconClass) iconDiv.classList.add(iconClass);
-      iconDiv.setAttribute('aria-hidden', 'true');
-      iconDiv.textContent = icon;
-
-      const titleDiv = document.createElement('div');
-      titleDiv.className = 'achievement-title';
-      titleDiv.textContent = title;
-
-      const subDiv = document.createElement('div');
-      subDiv.className = 'achievement-sub';
-      subDiv.textContent = subtitle;
-
-      card.appendChild(iconDiv);
-      card.appendChild(titleDiv);
-      card.appendChild(subDiv);
-
-      container.appendChild(card);
-    });
-  }
-
-  // For page load
-  renderAchievements(achievementsData, 'achievements-container');
-
-  // Copy link function
-  document.querySelectorAll('.copy-btn').forEach(button => {
-    button.addEventListener('click', () => {
-      const inviteInput = document.querySelector('.input-wrapper input');
-      if (!inviteInput) return;
-      // Copy input value
-      inviteInput.select();
-      inviteInput.setSelectionRange(0, 99999);
-      try {
-        navigator.clipboard.writeText(inviteInput.value);
-        button.textContent = 'Copied!';
-        setTimeout(() => {
-          button.textContent = button.getAttribute('aria-label').includes('Bonus') ? 'Copy Bonus link' : 'Copy link';
-        }, 1500);
-      } catch {
-        alert('Copy failed. Please copy manually.');
-      }
-      window.getSelection().removeAllRanges();
-    });
-  });
-</script>
+  </div>
 
 </body>
 </html>

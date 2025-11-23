@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="DashboardStyles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AlgoLearn</title>
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li>
+          <a href="#" class="Logo">
+            <img src="RealLogo.webp" alt="AlgoLearn Logo" />
+            <span class="nav-item no-underline">AlgoLearn</span>
+          </a>
+        </li>
+
+        <li>
+          <a href="#" onclick="switchView('dashboard')">
+            <i class="fas fa-tachometer-alt"></i>
+            <span class="nav-item">Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" onclick="switchView('flashcards')">
+            <i class="fas fa-layer-group"></i>
+            <span class="nav-item">Flashcards</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" onclick="switchView('dictionary')">
+            <i class="fas fa-book"></i>
+            <span class="nav-item">Dictionary</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" onclick="switchView('achievement')">
+            <i class="fas fa-trophy"></i>
+            <span class="nav-item">Achievement</span>
+          </a>
+        </li>
+
+        <li>
+          <a href="#" class="logout">
+            <i class="fas fa-sign-out-alt"></i>
+            <span class="nav-item">Logout</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div id="dashboard-view" class="main-content">
+      <div class="wrapper">
+        <h2>Programming Language</h2>
+        <div class="container">
+          
+          <div class="box">
+            <h3>HTML</h3>
+            <h4>10 Lessons</h4>
+            <a href="lesson/main.html" class="btn">Learn More</a>
+          </div>
+
+          <div class="box">
+            <h3>CSS</h3>
+            <a href="#" onclick="showLockedMsg(); return false;" class="btn">Learn More</a>
+          </div>
+
+          <div class="box">
+            <h3>Java</h3>
+            <a href="#" onclick="showLockedMsg(); return false;" class="btn">Learn More</a>
+          </div>
+
+          <div class="box">
+            <h3>C#</h3>
+            <a href="#" onclick="showLockedMsg(); return false;" class="btn">Learn More</a>
+          </div>
+
+          <div class="box">
+            <h3>JavaScript</h3>
+            <a href="#" onclick="showLockedMsg(); return false;" class="btn">Learn More</a>
+          </div>
+        </div>
+
+        <div class="progress-box">
+          <h3>Progress</h3>
+          <div class="progress-item" style="--width: 10%">HTML — 1/10</div>
+          <div class="progress-item" style="--width: 0%">CSS — 0/10</div>
+          <div class="progress-item" style="--width: 0%">JavaScript — 0/12</div>
+        </div>
+      </div>
+    </div>
+
+    <iframe id="flashcards-view" class="content-frame" src="flashcard.html"></iframe>
+    <iframe id="dictionary-view" class="content-frame" src="dictionary.html"></iframe>
+    <iframe id="achievement-view" class="content-frame" src="Achievement.html"></iframe>
+
+    <div class="HTMLBox" id="HTMLBox">
+      <div class="HTML-Inner">
+        <h2>HTML Lessons</h2>
+        <div class="lessons-container">
+          <div class="lesson">
+            <span>Lesson 1</span><a href="#" class="start-btn">Start</a>
+          </div>
+          <div class="lesson locked">
+            <span>Lesson 2</span><a href="#" class="start-btn">Start</a>
+          </div>
+          <div class="lesson locked">
+            <span>Lesson 3</span><a href="#" class="start-btn">Start</a>
+          </div>
+          </div>
+        <button id="closeHTML" class="btn close-btn">Close</button>
+      </div>
+    </div>
+
+    <div id="lockedPopup" class="locked-popup">
+        <div class="locked-content">
+            <i class="fas fa-lock" style="font-size: 40px; color: #476eae; margin-bottom: 15px;"></i>
+            <h3>NOT UNLOCKED YET</h3>
+            <button onclick="closeLockedMsg()" class="btn close-btn" style="margin-top: 10px;">Close</button>
+        </div>
+    </div>
+
+    <script>
+      // Function to switch views
+      function switchView(viewName) {
+        document.getElementById("dashboard-view").style.display = "none";
+        const frames = document.querySelectorAll(".content-frame");
+        frames.forEach((frame) => (frame.style.display = "none"));
+
+        if (viewName === "dashboard") {
+          document.getElementById("dashboard-view").style.display = "block";
+        } else {
+          const frame = document.getElementById(viewName + "-view");
+          if (frame) frame.style.display = "block";
+        }
+      }
+
+      // Function to show Locked Popup
+      function showLockedMsg() {
+        document.getElementById("lockedPopup").style.display = "flex";
+      }
+
+      // Function to close Locked Popup
+      function closeLockedMsg() {
+        document.getElementById("lockedPopup").style.display = "none";
+      }
+    </script>
+    <script src="script.js"></script>
+  </body>
+</html>

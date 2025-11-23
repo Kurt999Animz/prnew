@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Modern Flashcards</title>
+  <link rel="stylesheet" href="flashcard.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<nav class="hud">
+  <div class="hud-left">
+    <h1 class="brand">FLASH<span class="highlight">DECK</span></h1>
+    <span class="lesson-badge" id="currentLessonDisplay">Lesson 1</span>
+  </div>
+  
+  <div class="hud-stats">
+    <div class="stat-item">
+      <small>Accuracy</small>
+      <span id="scoreDisplay">0%</span>
+    </div>
+    <div class="stat-item">
+      <small>Progress</small>
+      <span id="progressDisplay">0/10</span>
+    </div>
+  </div>
+  
+  <div class="progress-track">
+    <div class="progress-fill" id="progressBar"></div>
+  </div>
+</nav>
+
+<main class="arena">
+  
+  <div class="card-scene">
+    <div class="card" id="flashcard">
+      <div class="card-face card-front">
+        <div class="card-content">
+          <span class="hint">Question</span>
+          <h2 id="cardFrontText">Loading...</h2>
+          <p class="instruction">(Tap or Space to flip)</p>
+        </div>
+      </div>
+      <div class="card-face card-back">
+        <div class="card-content">
+          <span class="hint">Answer</span>
+          <h2 id="cardBackText">...</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button id="btn-fail" class="btn-circle fail">
+      ✕
+      <span class="tooltip">Still Learning (Left)</span>
+    </button>
+    <button id="btn-pass" class="btn-circle pass">
+      ✓
+      <span class="tooltip">I Know (Right)</span>
+    </button>
+  </div>
+
+  <div class="lesson-nav">
+    <button id="prevLesson">← Prev Lesson</button>
+    <button id="nextLesson">Next Lesson →</button>
+  </div>
+
+</main>
+
+<div id="completionModal" class="modal">
+  <div class="modal-content">
+    <h2>Lesson Complete! 🎉</h2>
+    <p>You finished this set.</p>
+    <div class="final-score" id="finalScore">100%</div>
+    <button id="restartBtn">Replay Lesson</button>
+    <button id="nextLessonModalBtn">Next Lesson</button>
+  </div>
+</div>
+
+<div class="background-shapes">
+  <span></span><span></span><span></span><span></span>
+  <span></span><span></span><span></span><span></span>
+</div>
+
+<script src="flashcard.js"></script>
+</body>
+</html>

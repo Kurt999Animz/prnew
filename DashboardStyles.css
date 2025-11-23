@@ -1,0 +1,527 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  border: none;
+  text-decoration: none;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+/* --- NAVIGATION --- */
+nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 90px;
+  background: black; /* Change background color here */
+  overflow: hidden;
+  transition: width 0.3s linear;
+  z-index: 1000;
+}
+
+/* Logo inside nav */
+.Logo {
+  text-align: center;
+  display: flex;
+  transition: all 0.5s ease;
+  margin: 10px 0 0 10px;
+}
+
+.Logo img {
+  width: 60px;
+  height: 60px;
+  border-radius: 30%;
+}
+
+.Logo span {
+  font-weight: bold;
+  top: 10px;
+  padding-left: 10px;
+  font-size: 25px;
+  text-transform: uppercase;
+}
+
+/* Nav links */
+nav a {
+  position: relative;
+  color: #476eae;
+  font-size: 20px;
+  font-weight: bold;
+  display: table;
+  width: 500px;
+  padding: 14px;
+}
+
+nav ul li:not(:first-child) a {
+  margin-left: 9px; /* Adjust spacing */
+}
+
+.fas {
+  position: relative;
+  width: 60px;
+  height: 40px;
+  top: 13px;
+  font-size: 25px;
+  text-align: center;
+}
+
+.nav-item {
+  position: relative;
+  top: 12px;
+  margin-left: 10px;
+}
+
+/* Hover effects */
+a:hover:not(.Logo) {
+  background: #eee;
+}
+
+nav:hover {
+  width: 320px;
+  transition: all 0.5s ease;
+}
+
+/* Logout button */
+.logout {
+  position: absolute;
+  bottom: 0;
+}
+
+/* Underline effect on hover */
+nav span {
+  position: relative;
+}
+
+nav span::before {
+  content: "";
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background-color: #476eae;
+  transition: width 0.4s ease;
+}
+
+nav a:hover span:not(.no-underline)::before {
+  width: 100%;
+}
+
+.wrapper {
+  background: white;
+  border-radius: 12px;
+  padding: 15px;
+  margin-left: 120px;
+  margin-top: 40px;
+  width: calc(100% - 150px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  border: 2px solid #476eae;
+}
+
+.wrapper h2 {
+  margin-bottom: 10px;
+  font-size: 22px;
+  font-weight: 600;
+  color: #476eae;
+}
+
+/* --- SCROLLABLE CONTAINER --- */
+.container {
+  display: flex;
+  overflow-x: auto;
+  gap: 12px;
+  padding: 10px 0;
+  margin-left: 20px;
+  white-space: nowrap;
+  scrollbar-width: thin;
+}
+
+.container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.container::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 5px;
+}
+
+/* Box inside container */
+.box {
+  min-width: 160px;
+  height: 140px;
+  background: white;
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 2px solid #476eae;
+  transition: 0.3s ease;
+}
+
+.box:hover {
+  border-color: #32508a;
+  transform: translateY(-3px);
+}
+
+.btn {
+  background: #476eae;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 14px;
+  display: inline-block;
+}
+
+.btn:hover {
+  background: #32508a;
+}
+
+.container h4 {
+  font-size: 10px;
+  opacity: 5px;
+}
+
+/* Locked box styles */
+.locked {
+  pointer-events: none;
+  opacity: 0.5;
+  filter: grayscale(100%);
+}
+
+.locked .start-btn {
+  background: gray;
+}
+
+.locked span::after {
+  content: " 🔒";
+  color: red;
+}
+
+/* --- LESSON BOX --- */
+.HTMLBox {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+  z-index: 1000;
+}
+
+.HTMLBox.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.HTML-Inner {
+  background: #fff;
+  border-radius: 15px;
+  padding: 25px 35px;
+  width: 85%;
+  max-width: 900px;
+  text-align: center;
+  transform: scale(0.85);
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+
+.HTMLBox.open .HTML-Inner {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.HTML-Inner h2 {
+  color: #476eae;
+  margin-bottom: 15px;
+  font-size: 26px;
+  font-weight: 600;
+}
+
+/* --- SCROLLABLE LESSONS --- */
+.lessons-container {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  padding: 10px 5px;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+}
+
+.lessons-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.lessons-container::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+.lesson {
+  width: 200px; /* box width */
+  height: 140px; /* box height */
+  background-color: #f7f9fc;
+  border: 2px solid #476eae;
+  border-radius: 10px;
+  padding: 20px 10px;
+  text-align: center;
+  transition: 0.3s ease;
+  flex: 0 0 auto; /* prevents shrinking */
+}
+
+.lesson span {
+  display: block;
+  font-weight: 600;
+  color: #476eae;
+  margin-bottom: 10px;
+}
+
+.lesson:hover {
+  background-color: #e3e9f5;
+  transform: translateY(-3px);
+}
+
+.start-btn {
+  background: #476eae;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background 0.3s ease;
+}
+
+.start-btn:hover {
+  background: #32508a;
+}
+
+.close-btn {
+  margin-top: 20px;
+  background: #476eae;
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+/* --- PROGRESS SECTION --- */
+.progress-box {
+  margin-top: 30px;
+  width: 100%;
+}
+
+.progress-box h3 {
+  margin-bottom: 15px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #476eae;
+}
+
+.progress-item {
+  position: relative;
+  background-color: #eef2f8; /* Light grey background for the empty part of bar */
+  color: #333;
+  padding: 12px 15px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  overflow: hidden;
+  z-index: 1;
+  border: 1px solid #dbe4f3;
+}
+
+/* This pseudo-element creates the visual "filled" bar */
+.progress-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: var(--width, 0%); /* Uses the variable set in HTML style="" */
+  background-color: #476eae;
+  opacity: 0.2; /* Makes it subtle, remove opacity for solid color */
+  z-index: -1; /* Puts it behind the text */
+  transition: width 0.5s ease;
+}
+
+/* --- IFRAME & VIEW SWITCHING --- */
+.content-frame {
+  display: none; /* Hidden by default */
+  position: fixed; /* Fixed to stay in place while scrolling inside */
+  top: 0;
+  right: 0;
+  width: calc(100% - 90px); /* 100% minus the collapsed sidebar width */
+  height: 100vh;
+  border: none;
+  background: white;
+  margin-left: 90px;
+  transition: width 0.3s linear;
+}
+
+/* When Sidebar expands (hover), adjust main content width if necessary.
+   Note: If you want the content to squeeze, use margin-left: 320px on hover.
+   For now, the absolute positioning of nav overlays content slightly on hover 
+   which is standard for this type of drawer menu. */
+
+   /* --- LOCKED POPUP STYLES --- */
+.locked-popup {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: none; /* Hidden by default */
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.locked-content {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  border: 2px solid #476eae;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  animation: popIn 0.3s ease;
+}
+
+.locked-content h3 {
+  color: #476eae;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+@keyframes popIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* --- MOBILE VIEW ADAPTER (Bottom Navigation) --- */
+@media (max-width: 768px) {
+  /* 1. Move Navigation to Bottom */
+  nav {
+    position: fixed;
+    bottom: 0;
+    top: auto;
+    left: 0;
+    width: 100%;
+    height: 70px; /* Fixed footer height */
+    transition: none;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    overflow: visible; /* Ensure shadows/popups aren't clipped */
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+  }
+
+  /* Disable sidebar hover expansion on mobile */
+  nav:hover {
+    width: 100%;
+  }
+
+  /* 2. Arrange Icons Horizontally */
+  nav ul {
+    display: flex;
+    width: 100%;
+    justify-content: space-between; /* Spread icons evenly */
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  nav ul li {
+    margin: 0;
+    width: auto;
+  }
+
+  /* Reset spacing for non-first child */
+  nav ul li:not(:first-child) a {
+    margin-left: 0;
+  }
+
+  /* 3. Style Links (Icons only) */
+  nav a {
+    width: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+  }
+
+  /* Hide Text Labels */
+  .nav-item, 
+  .Logo span {
+    display: none !important;
+  }
+
+  /* 4. Resize Icons for Mobile */
+  .fas {
+    top: 0; /* Reset vertical offset */
+    width: auto;
+    height: auto;
+    font-size: 24px; /* Smaller icon size */
+    margin-bottom: 0;
+  }
+
+  /* Resize Logo Image */
+  .Logo {
+    margin: 0;
+    display: flex;
+    align-items: center;
+  }
+  
+  .Logo img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+  }
+
+  /* 5. Fix Logout Button (Was absolute, now part of flow) */
+  .logout {
+    position: static; /* Removes absolute positioning */
+    bottom: auto;
+  }
+
+  /* 6. Adjust Main Content to fit Mobile */
+  .wrapper {
+    margin-left: 0; /* Remove sidebar gap */
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 80px; /* Add space at bottom so content isn't hidden behind nav */
+    border: none;
+    box-shadow: none;
+    padding: 10px;
+  }
+
+  .container {
+    margin-left: 0;
+    gap: 10px;
+  }
+
+  /* Adjust Iframes (Flashcards, Dictionary, etc.) */
+  .content-frame {
+    margin-left: 0;
+    width: 100%;
+    height: calc(100vh - 70px); /* Full height minus navbar */
+    bottom: 70px;
+    top: 0;
+    z-index: 900;
+  }
+
+  /* Adjust Popups to sit above the bottom nav */
+  .locked-popup, .HTMLBox {
+    z-index: 2100; /* Higher than nav */
+    padding-bottom: 70px; /* Center visually above nav */
+  }
+}

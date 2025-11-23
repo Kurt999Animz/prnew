@@ -1,72 +1,325 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
+:root {
+  --bg-dark: #0f172a;
+  --bg-panel: rgba(30, 41, 59, 0.6);
+  --primary: #3b82f6;
+  --accent: #06b6d4;
+  --locked: #475569;
+  --text-main: #f1f5f9;
+  --text-muted: #94a3b8;
+  --glass: blur(12px);
+  --border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
 body {
-    margin: 0;
-    font-family: "Poppins", sans-serif;
-    background: radial-gradient(circle at top left, #1a1a2e, #16213e);
-    color: #fff;
-    height: 100vh;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  height: 100vh;
+  /* Crucial for scrollbar removal on the body */
+  overflow: hidden; 
+  display: flex;
+  flex-direction: column;
 }
 
-.topborder {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    height: 70px;
-    background: rgba(18, 18, 31, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-    z-index: 10;
+/* --- TOP HUD --- */
+.hud {
+  height: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+  background: rgba(15, 23, 42, 0.9);
+  backdrop-filter: var(--glass);
+  border-bottom: var(--border);
+  z-index: 10;
 }
 
-.topborder h1 { font-size: 1.8rem; letter-spacing: 2px; }
+.brand { font-size: 1.5rem; font-weight: 800; letter-spacing: -1px; }
+.highlight { color: var(--accent); }
 
-.dictionary-container {
-    margin-top: 100px;
-    margin-left: 50px;
-    width: 300px;
+.search-container input {
+  background: rgba(255,255,255,0.1);
+  border: var(--border);
+  padding: 8px 16px;
+  border-radius: 20px;
+  color: #fff;
+  width: 250px;
+  outline: none;
+  transition: 0.3s;
+}
+.search-container input:focus { border-color: var(--primary); width: 300px; }
+
+/* ========================================= */
+/* --- MAIN WRAPPER (DEFAULT DESKTOP) ---    */
+/* ========================================= */
+.dictionary-wrapper {
+  display: flex;
+  flex: 1;
+  height: calc(100vh - 70px);
+  overflow: hidden;
 }
 
-.dictionary-container ul {
-    list-style: none;
-    padding: 0;
+/* --- SIDEBAR LIST (DEFAULT DESKTOP) --- */
+.term-list-container {
+  width: 300px;
+  background: rgba(15, 23, 42, 0.5);
+  border-right: var(--border);
+  overflow-y: auto; 
+  display: flex;
+  flex-direction: column;
 }
 
-.dictionary-container li {
-    padding: 10px;
-    margin-bottom: 5px;
-    background: rgba(255,255,255,0.1);
-    cursor: pointer;
-    border-radius: 5px;
-    transition: 0.2s;
+.list-header { padding: 15px 20px; border-bottom: var(--border); }
+.list-header small { color: var(--text-muted); font-weight: 700; letter-spacing: 1px; }
+
+.term-list { list-style: none; padding: 10px; }
+
+.term-item {
+  padding: 12px 15px;
+  margin-bottom: 5px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+  color: var(--text-muted);
 }
 
-.dictionary-container li.locked {
-    opacity: 0.3;
-    cursor: not-allowed;
+.term-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
+.term-item.active { background: var(--primary); color: #fff; }
+
+/* LOCKED STATE */
+.term-item.locked { opacity: 0.5; cursor: not-allowed; }
+.term-item.locked:hover { background: rgba(239, 68, 68, 0.1); }
+.lock-icon { font-size: 0.8rem; }
+
+/* SHAKE ANIMATION */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+.shake { animation: shake 0.3s ease-in-out; color: #ef4444 !important; }
+
+/* --- DEFINITION AREA --- */
+.definition-area {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  overflow-y: auto; 
 }
 
-.dictionary-container li:hover:not(.locked) {
-    background: #00aaff;
+.definition-card {
+  width: 100%;
+  max-width: 800px;
+  background: var(--bg-panel);
+  border: var(--border);
+  backdrop-filter: var(--glass);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+  opacity: 1; 
+  transform: translateY(0);
 }
 
-.definition-box {
-    position: fixed;
-    left: 400px;
-    top: 100px;
-    right: 50px;
-    bottom: 50px;
-    padding: 20px;
-    background: rgba(18,18,31,0.8);
-    border-radius: 10px;
-    overflow: auto;
+.tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--accent);
+  margin-bottom: 10px;
+  background: rgba(6, 182, 212, 0.1);
+  padding: 5px 10px;
+  border-radius: 4px;
 }
 
-.definition-box h3 {
-    color: #00c6ff;
+#defTitle { font-size: 2.5rem; margin-bottom: 20px; color: #fff; }
+#defDescription { font-size: 1.1rem; line-height: 1.7; color: var(--text-muted); }
+
+.code-block {
+  margin-top: 30px;
+  background: #000;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.1);
+  font-family: 'Courier New', monospace;
+  color: #10b981;
+  overflow-x: auto; 
 }
 
-.definition-box p {
-    margin-top: 15px;
-    line-height: 1.5;
+/* --- ANIMATED BACKGROUND --- */
+.background-shapes { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+.background-shapes span {
+  position: absolute; width: 300px; height: 300px;
+  background: radial-gradient(#3b82f6, transparent);
+  opacity: 0.1; border-radius: 50%;
+}
+.background-shapes span:nth-child(1) { top: -50px; left: -50px; }
+.background-shapes span:nth-child(2) { bottom: -50px; right: -50px; background: radial-gradient(#06b6d4, transparent); }
+
+
+/* ========================================= */
+/* --- MOBILE OPTIMIZATION (MAX 768px) ---   */
+/* ========================================= */
+@media (max-width: 768px) {
+    /* 1. LAYOUT CHANGES */
+    .dictionary-wrapper {
+        flex-direction: column;
+        /* Ensure definition area is visible and scrollable */
+        overflow-y: auto;
+    }
+    
+    .definition-area {
+        padding: 20px;
+        /* Reset overflow-y as it's now handled by dictionary-wrapper */
+        overflow-y: visible;
+    }
+    
+    .definition-card {
+        padding: 30px 20px;
+        margin-bottom: 50px; 
+    }
+    
+    #defTitle { font-size: 2rem; }
+
+    /* 2. HUD & SEARCH */
+    .hud { padding: 0 1rem; }
+    .search-container input { width: 180px; }
+    .search-container input:focus { width: 220px; }
+
+
+    /* 3. MOBILE SIDEBAR (Slide-out drawer) */
+    .term-list-container {
+        position: fixed;
+        left: 0;
+        top: 70px; 
+        height: calc(100% - 70px);
+        width: 80%; /* Max width when fully expanded */
+        max-width: 300px; /* Don't get too wide on tablets */
+        z-index: 50;
+        transition: transform 0.3s ease-in-out;
+        
+        /* Start position: 100% of its own width off-screen, 
+           minus a small visible tab (e.g., 60px) */
+        transform: translateX(calc(-100% + 60px));
+        
+        overflow-y: hidden; 
+        white-space: nowrap;
+        background: rgba(15, 23, 42, 0.95);
+        border-right: var(--border);
+    }
+    
+    /* When hovered (or clicked/focused in JS), slide fully into view */
+    .term-list-container:hover,
+    .term-list-container:focus-within {
+        transform: translateX(0);
+        overflow-y: auto; 
+        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.7);
+    }
+    
+    /* Ensure the list header is always visible in the "tab" part */
+    .list-header {
+        position: sticky;
+        top: 0;
+        z-index: 51;
+        background: rgba(15, 23, 42, 0.95);
+    }
+
+    /* Keep the icon for the "tab" when collapsed */
+    .list-header small {
+        color: var(--primary);
+        /* Move the text far to the right to hide it until expanded */
+        transform: translateX(300px); 
+        transition: transform 0.3s;
+        display: inline-block;
+    }
+    
+    /* Show text when expanded */
+    .term-list-container:hover .list-header small,
+    .term-list-container:focus-within .list-header small {
+        transform: translateX(0);
+    }
+
+    /* Item styling for collapsed state */
+    .term-item {
+        justify-content: flex-start;
+        gap: 15px;
+        /* Ensure the full width of the text doesn't affect the scroll/layout */
+        width: 100%; 
+    }
+    
+    /* Keep term text hidden by default in the list items */
+    .term-item span:first-child {
+        display: inline-block;
+        /* Start hidden outside the 60px visible area */
+        transform: translateX(100%);
+        opacity: 0;
+        transition: transform 0.3s, opacity 0.3s;
+    }
+    
+    /* Show term text when expanded */
+    .term-list-container:hover .term-item span:first-child,
+    .term-list-container:focus-within .term-item span:first-child {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    
+    /* Center the icon in the visible 60px tab */
+    .term-item .lock-icon {
+        font-size: 1.5rem;
+        min-width: 40px;
+        text-align: center;
+        /* Ensure the icon stays visible at the left edge */
+        position: absolute;
+        left: 10px;
+    }
+    
+    /* Remove padding and border-right from the definition area when the list is open */
+    .definition-area {
+        padding-left: 70px; /* Push content over slightly to account for the collapsed tab */
+        transition: padding-left 0.3s ease-in-out;
+    }
+    /* When expanded, definition area padding snaps back (this may not be necessary depending on desired overlap) */
+    .term-list-container:hover ~ .definition-area,
+    .term-list-container:focus-within ~ .definition-area {
+        padding-left: 20px; 
+    }
+}
+
+/* ========================================= */
+/* --- SCROLLBAR HIDING (Universal) ---      */
+/* ========================================= */
+/* For Chrome, Safari, and Opera */
+.term-list-container::-webkit-scrollbar,
+.definition-area::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; 
+}
+/* For Firefox */
+.term-list-container {
+    scrollbar-width: none;
+    
+}
+
+/* Transparent scrollbar track */
+*::-webkit-scrollbar {
+    width: 8px;
+}
+
+*::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #888; /* color of the bar */
+    border-radius: 4px;
 }

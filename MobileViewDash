@@ -50,7 +50,7 @@
   <div class="left">
     <h3>Customize Character</h3>
     <div class="character-preview"></div>
-    <button class="btn">Change Outfit</button>
+    <button class="btn">Change Skin</button>
     <div class="circle-options">
             <div class="circle"></div>
             <div class="circle"></div>

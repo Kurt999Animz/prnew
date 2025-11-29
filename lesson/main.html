@@ -39,7 +39,37 @@
         <!-- The battle.html page will be transparent, showing the grid behind it -->
         <iframe id="battleFrame" src="battle.html" allowtransparency="true"></iframe>
     </div>
+<div id="quizInterface" class="interface" style="display: none;">
+        <h2 id="quizTitle" style="text-align: center; color: #0ff;">FINAL KNOWLEDGE CHECK</h2>
+        <h3 id="quizQuestion" style="text-align: center;">Question text goes here...</h3>
 
+        <div class="door-container">
+            <div class="door-wrapper" onclick="handleQuizChoice('a')">
+                <div class="door-label">A</div>
+                <img id="doorA" class="door-img" src="door.png" alt="Door A">
+            </div>
+            
+            <div class="door-wrapper" onclick="handleQuizChoice('b')">
+                <div class="door-label">B</div>
+                <img id="doorB" class="door-img" src="door.png" alt="Door B">
+            </div>
+
+            <div class="door-wrapper" onclick="handleQuizChoice('c')">
+                <div class="door-label">C</div>
+                <img id="doorC" class="door-img" src="door.png" alt="Door C">
+            </div>
+        </div>
+
+        <div style="text-align: center; height: 150px; display: flex; align-items: center; justify-content: center;">
+            <img id="quizChar" src="charstatic.png" alt="Character" style="height: 120px; transition: opacity 0.5s;">
+        </div>
+
+        <div class="choices-container">
+            <div id="textA" class="choice-text">Option A</div>
+            <div id="textB" class="choice-text">Option B</div>
+            <div id="textC" class="choice-text">Option C</div>
+        </div>
+    </div>
     <!-- Footer -->
     <footer>
         <a href="../index.html" id="homeLink">< BACK</a>
@@ -58,6 +88,7 @@
 
     <!-- JAVASCRIPT LOGIC START -->
     <script src="script.js"></script>
+    <script src="quiz.js"></script>
     <!-- JAVASCRIPT LOGIC END -->
      <script>
         

@@ -11,26 +11,15 @@
 /* =========================================
    2. GLOBAL RESET & BODY (The Infinite Grid)
    ========================================= */
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-}
-
-/* IMPORTANT FIX: allow page to scroll & prevent footer overlap */
 body {
+    margin: 0;
     font-family: 'VT323', monospace;
-    font-size: 18px;
+    font-size: 24px; /* BIGGER TEXT */
     color: #fff;
-
-    /* remove overflow hidden — this was BREAKING MOBILE */
-    overflow-x: hidden;
-    overflow-y: auto;
-
+    height: 100vh;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
 
@@ -41,294 +30,8 @@ body {
 /* --- INFINITE MOVING GRID --- */
 body::before {
     content: "";
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background-image:
-        linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-    background-size: 40px 40px;
-    animation: moveGrid 1s linear infinite;
-    z-index: -1;
-    pointer-events: none;
-}
-
-/* =========================================
-   3. UI COMPONENTS (Glassmorphism)
-   ========================================= */
-
-.interface, footer, #modalContent {
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-}
-
-/* Buttons */
-button {
-    font-family: 'VT323', monospace;
-    font-size: 1.1rem;
-    text-transform: uppercase;
-    cursor: pointer;
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
-    border: 1px solid #fff;
-    padding: 5px 15px;
-    margin: 5px;
-    transition: all 0.2s ease;
-    box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
-}
-button:hover {
-    background: #fff;
-    color: #2b1055;
-    box-shadow: 0 0 15px #fff;
-}
-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    box-shadow: none;
-}
-
-/* =========================================
-   4. FOOTER (Fixed but NEVER overlaps)
-   ========================================= */
-
-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    gap: 15px;
-    padding: 10px 6px;
-
-    background: rgba(0,0,0,0.5);
-    backdrop-filter: blur(4px);
-
-    border-top: 1px solid rgba(255,255,255,0.2);
-    z-index: 999;
-}
-
-/* KEY FIX: Add bottom padding so footer won't block content */
-main, .interface {
-    padding-bottom: 80px !important;
-}
-
-footer span {
-    cursor: pointer;
-    padding: 8px 18px;
-    border: 1px solid rgba(255,255,255,0.3);
-    background: rgba(0,0,0,0.3);
-    transition: 0.3s;
-    color: #aaa;
-    font-size: 1.1rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    white-space: nowrap;
-}
-
-footer span:hover,
-footer span.active {
-    color: #fff;
-    background: rgba(255,255,255,0.1);
-    border-color: #fff;
-    box-shadow: 0 0 10px rgba(255,255,255,0.4);
-    text-shadow: 0 0 8px #fff;
-}
-
-/* --- Extra optimization for very small screens --- */
-@media (max-width: 480px) {
-    footer {
-        gap: 8px;
-        padding: 8px 4px;
-    }
-
-    footer span {
-        padding: 6px 12px;
-        font-size: 0.9rem;
-    }
-}
-
-/* =========================================
-   5. MAIN LAYOUT (Compact)
-   ========================================= */
-
-.interface {
-    flex: 1;
-    display: none;
-    flex-direction: column;
-    margin: 10px;
-    padding: 15px;
-    border-radius: 8px;
-    overflow-y: auto;
-}
-
-.active {
-    display: flex;
-}
-
-#lessonContent {
-    background: rgba(0,0,0,0.4);
-    border: 1px solid rgba(100,255,218,0.3);
-    padding: 15px;
-    margin-top: 10px;
-    flex-grow: 1;
-    overflow-y: auto;
-    color: #eee;
-    line-height: 1.5;
-}
-
-#lessonTitle {
-    margin-top: 0;
-    color: #0ff;
-    text-shadow: 0 0 5px #0ff;
-}
-
-code, pre {
-    background: #111;
-    color: #0f0;
-    padding: 2px 5px;
-    border-radius: 3px;
-    font-family: 'VT323', monospace;
-    border: 1px solid #333;
-}
-pre {
-    padding: 10px;
-    overflow-x: auto;
-    display: block;
-}
-
-#lessonNav {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-}
-
-/* =========================================
-   6. BATTLE INTERFACE
-   ========================================= */
-
-#battleInterface {
-    padding: 0;
-    background: transparent;
-    border: none;
-    box-shadow: none;
-}
-
-iframe#battleFrame {
-    width: 100%;
-    height: 100%;
-    border: none;
-}
-
-canvas#game {
-    border: 2px solid #fff;
-    box-shadow: 0 0 15px rgba(0,255,255,0.3);
-    background: url("bg.png");
-    background-size: cover;
-    border-radius: 4px;
-    margin: 0 auto 10px auto;
-    width: auto;
-}
-
-#editorUI {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    gap: 10px;
-}
-
-textarea#editor {
-    background: rgba(10,10,20,0.9);
-    color: #0f0;
-    border: 1px solid rgba(255,255,255,0.4);
-    padding: 10px;
-    font-family: 'VT323', monospace;
-    font-size: 1.2rem;
-    resize: none;
-    flex-grow: 1;
-    border-radius: 4px;
-}
-textarea#editor:focus {
-    outline: none;
-    border-color: #0f0;
-    box-shadow: 0 0 10px rgba(0,255,0,0.2);
-}
-
-#challengeBox {
-    background: rgba(255,255,255,0.1);
-    padding: 8px;
-    border-radius: 4px;
-    margin-bottom: 5px;
-    border-left: 3px solid #0ff;
-    text-align: left;
-}
-
-#feedbackBox {
-    min-height: 20px;
-    font-weight: bold;
-    text-shadow: 1px 1px 0 #000;
-}
-
-#checkBtn {
-    background: rgba(0,255,0,0.2);
-    border-color: #0f0;
-    color: #fff;
-    width: 100%;
-    font-size: 1.3rem;
-    letter-spacing: 2px;
-}
-#checkBtn:hover {
-    background: #0f0;
-    color: #000;
-}
-
-/* =========================================
-   7. MODAL
-   ========================================= */
-
-#modal {
-    display: none;
-    position: fixed;
-    z-index: 200;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.7);
-    backdrop-filter: blur(3px);
-}
-
-#modalContent {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #2b1055;
-    border: 2px solid #fff;
-    color: #fff;
-    padding: 20px;
-    width: 90%;
-    max-width: 450px;
-    text-align: center;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(255,255,255,0.2);
-}
-
-#modalClose {
-    float: right;
-    font-size: 2rem;
-    cursor: pointer;
-    color: #ff0055;
-    line-height: 0.8;
-}
-#modalClose:hover {
-    text-shadow: 0 0 10px #ff0055;
-}    width: 100%; height: 100%;
+    top: 0; left: 0; width: 100%; height: 100%;
     background-image:
         linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
@@ -352,118 +55,82 @@ textarea#editor:focus {
 /* Buttons */
 button {
     font-family: 'VT323', monospace;
-    font-size: 1.1rem;
+    font-size: 1.4rem; /* bigger */
     text-transform: uppercase;
     cursor: pointer;
     background: rgba(255, 255, 255, 0.1);
     color: #fff;
     border: 1px solid #fff;
-    padding: 5px 15px;
-    margin: 5px;
+    padding: 4px 12px; /* compact */
+    margin: 4px;
     transition: all 0.2s ease;
     box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
 }
+
 button:hover {
     background: #fff;
     color: #2b1055;
     box-shadow: 0 0 15px #fff;
 }
-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    box-shadow: none;
-}
 
 /* =========================================
-   4. FOOTER (Mobile-Compatible Fix)
+   4. FOOTER
    ========================================= */
-
 footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-
     display: flex;
     justify-content: center;
     align-items: center;
-
-    gap: 15px;
-    padding: 10px 6px;
-
-    background: rgba(0,0,0,0.5);
-    backdrop-filter: blur(4px);
-
-    border-top: 1px solid rgba(255,255,255,0.2);
-    z-index: 999;
+    gap: 15px; /* compact */
+    padding: 10px;
+    flex-shrink: 0;
+    z-index: 10;
 }
 
 footer span {
     cursor: pointer;
-    padding: 8px 18px;
+    padding: 6px 12px;
     border: 1px solid rgba(255,255,255,0.3);
     background: rgba(0,0,0,0.3);
     transition: 0.3s;
     color: #aaa;
-    font-size: 1.1rem;
+    font-size: 1.4rem; /* bigger */
     text-transform: uppercase;
     letter-spacing: 1px;
-    white-space: nowrap;
-}
-
-footer span:hover,
-footer span.active {
-    color: #fff;
-    background: rgba(255,255,255,0.1);
-    border-color: #fff;
-    box-shadow: 0 0 10px rgba(255,255,255,0.4);
-    text-shadow: 0 0 8px #fff;
-}
-
-/* --- Extra optimization for very small screens --- */
-@media (max-width: 480px) {
-    footer {
-        gap: 8px;
-        padding: 8px 4px;
-    }
-
-    footer span {
-        padding: 6px 12px;
-        font-size: 0.9rem;
-    }
 }
 
 /* =========================================
-   5. MAIN LAYOUT (Compact)
+   5. MAIN LAYOUT
    ========================================= */
 
 .interface {
     flex: 1;
     display: none;
     flex-direction: column;
-    margin: 10px;
-    padding: 15px;
+    margin: 6px; /* compact */
+    padding: 10px; /* compact */
     border-radius: 8px;
     overflow: hidden;
 }
 
-.active {
-    display: flex;
-}
+.active { display: flex; }
 
 #lessonContent {
-    background: rgba(0,0,0,0.4);
-    border: 1px solid rgba(100,255,218,0.3);
-    padding: 15px;
-    margin-top: 10px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(100, 255, 218, 0.3);
+    padding: 10px; /* compact */
+    margin-top: 6px;
     flex-grow: 1;
     overflow-y: auto;
     color: #eee;
-    line-height: 1.5;
+    line-height: 1.6; /* easier to read */
+    
 }
+#lessonContent::-webkit-scrollbar-thumb { background: transparent; }
+#lessonContent::-webkit-scrollbar-track { background: transparent; }
 
 #lessonTitle {
     margin-top: 0;
+    font-size: 2.2rem; /* bigger */
     color: #0ff;
     text-shadow: 0 0 5px #0ff;
 }
@@ -471,11 +138,13 @@ footer span.active {
 code, pre {
     background: #111;
     color: #0f0;
-    padding: 2px 5px;
+    padding: 4px 6px; /* readable */
     border-radius: 3px;
     font-family: 'VT323', monospace;
+    font-size: 1.4rem; /* bigger */
     border: 1px solid #333;
 }
+
 pre {
     padding: 10px;
     overflow-x: auto;
@@ -485,7 +154,7 @@ pre {
 #lessonNav {
     display: flex;
     justify-content: space-between;
-    margin-top: 10px;
+    margin-top: 8px;
 }
 
 /* =========================================
@@ -507,64 +176,56 @@ iframe#battleFrame {
 
 canvas#game {
     border: 2px solid #fff;
-    box-shadow: 0 0 15px rgba(0,255,255,0.3);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
     background: url("bg.png");
     background-size: cover;
     border-radius: 4px;
-    margin: 0 auto 10px auto;
-    width: auto;
+    margin: 0 auto 6px auto;
 }
 
 #editorUI {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    gap: 10px;
+    gap: 6px;
 }
 
 textarea#editor {
-    background: rgba(10,10,20,0.9);
+    background: rgba(10, 10, 20, 0.9);
     color: #0f0;
-    border: 1px solid rgba(255,255,255,0.4);
+    border: 1px solid rgba(255, 255, 255, 0.4);
     padding: 10px;
     font-family: 'VT323', monospace;
-    font-size: 1.2rem;
+    font-size: 1.6rem; /* bigger */
     resize: none;
     flex-grow: 1;
     border-radius: 4px;
 }
-textarea#editor:focus {
-    outline: none;
-    border-color: #0f0;
-    box-shadow: 0 0 10px rgba(0,255,0,0.2);
-}
 
 #challengeBox {
-    background: rgba(255,255,255,0.1);
-    padding: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 6px; /* compact */
     border-radius: 4px;
     margin-bottom: 5px;
     border-left: 3px solid #0ff;
     text-align: left;
+    font-size: 1.4rem; /* bigger */
 }
 
 #feedbackBox {
     min-height: 20px;
     font-weight: bold;
+    font-size: 1.6rem; /* bigger */
     text-shadow: 1px 1px 0 #000;
 }
 
 #checkBtn {
-    background: rgba(0,255,0,0.2);
+    background: rgba(0, 255, 0, 0.2);
     border-color: #0f0;
     color: #fff;
     width: 100%;
-    font-size: 1.3rem;
+    font-size: 1.8rem; /* bigger */
     letter-spacing: 2px;
-}
-#checkBtn:hover {
-    background: #0f0;
-    color: #000;
 }
 
 /* =========================================
@@ -575,18 +236,15 @@ textarea#editor:focus {
     display: none;
     position: fixed;
     z-index: 200;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.7);
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(3px);
 }
 
 #modalContent {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     background: #2b1055;
     border: 2px solid #fff;
@@ -596,17 +254,49 @@ textarea#editor:focus {
     max-width: 450px;
     text-align: center;
     border-radius: 10px;
-    box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    font-size: 1.6rem; /* bigger */
 }
 
 #modalClose {
     float: right;
-    font-size: 2rem;
+    font-size: 2.5rem; /* bigger */
     cursor: pointer;
     color: #ff0055;
-    line-height: 0.8;
 }
-#modalClose:hover {
-    text-shadow: 0 0 10px #ff0055;
-   }
 
+/* =========================================
+   8. QUIZ INTERFACE
+   ========================================= */
+
+#quizInterface {
+    justify-content: center;
+    align-items: center;
+}
+
+.door-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px; /* compact */
+    margin: 10px 0;
+}
+
+.door-wrapper { cursor: pointer; }
+
+.door-label {
+    font-size: 2.4rem; /* bigger */
+    color: #fff;
+    font-weight: bold;
+    text-shadow: 0 0 10px #0ff;
+    margin-bottom: 5px;
+}
+
+.door-img { width: 80px; }
+
+.choice-text {
+    background: rgba(0,0,0,0.5);
+    padding: 8px; /* compact */
+    border: 1px solid #555;
+    width: 180px; /* compact */
+    text-align: center;
+    font-size: 1.6rem; /* bigger */
+}
